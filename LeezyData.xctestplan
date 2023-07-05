@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "A70FFC01-53E8-4C8E-98B6-CF3C8B8B2705",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "LeezyDataTests",
+        "name" : "LeezyDataTests"
+      }
+    }
+  ],
+  "version" : 1
+}
