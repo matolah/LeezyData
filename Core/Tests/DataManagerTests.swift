@@ -1,24 +1,18 @@
 // Created by Mateus Lino
 
-import CoreData
 import XCTest
 
 @testable import LeezyData
 
 final class DataManagerTests: XCTestCase {
-    typealias AnyMockEntity = AnyEntity<AnyMockEntityIdentifier>
-
     private var dataManager: DataManager!
-    private var dataServiceSpy: DataServiceSpy<AnyMockEntity>!
+    private var dataServiceSpy: DataServiceSpy<MockEntity>!
 
     override func setUp() {
         super.setUp()
 
         dataServiceSpy = DataServiceSpy()
         dataManager = DataManager(dataServices: [dataServiceSpy])
-
-        LocalMockEntity.referenceBuilder = dataManager
-        LocalMockEntity.localEntityBuilder = dataManager
     }
 
     override func tearDown() {
@@ -32,7 +26,7 @@ final class DataManagerTests: XCTestCase {
         let mockEntity = mockEntity()
         dataServiceSpy.latestValues.append(mockEntity)
 
-        let result: Result<[AnyMockEntity], Error> = await dataManager.values(shouldRefetch: false)
+        let result: Result<[MockEntity], Error> = await dataManager.values(shouldRefetch: false)
 
         switch result {
         case .success(let values):
@@ -43,16 +37,15 @@ final class DataManagerTests: XCTestCase {
         }
     }
 
-    private func mockEntity() -> AnyMockEntity {
-        let entity = RemoteMockEntity(id: UUID().uuidString)
-        return AnyMockEntity(value: entity)
+    private func mockEntity() -> MockEntity {
+        return MockEntity(id: UUID().uuidString)
     }
 
     func test_values_whenShouldRefetch_shouldReturnFetchedValues() async {
         let mockEntity = mockEntity()
         dataServiceSpy.entitiesResultToReturn = .success([mockEntity])
 
-        let result: Result<[AnyMockEntity], Error> = await dataManager.values(shouldRefetch: true)
+        let result: Result<[MockEntity], Error> = await dataManager.values(shouldRefetch: true)
 
         switch result {
         case .success(let values):
@@ -66,7 +59,7 @@ final class DataManagerTests: XCTestCase {
     func test_values_whenDataServiceIsInvalid_shouldReturnError() async {
         dataManager = DataManager(dataServices: [])
 
-        let result: Result<[RemoteMockEntity], Error> = await dataManager.values(shouldRefetch: true)
+        let result: Result<[MockEntity], Error> = await dataManager.values(shouldRefetch: true)
 
         switch result {
         case .success:
@@ -130,11 +123,5 @@ final class DataManagerTests: XCTestCase {
         case .failure(let error):
             XCTAssertTrue(error as? DataManagementError == DataManagementError.serviceNotFound)
         }
-    }
-
-    func test_createLocalService_whenDataServiceIsInvalid_shouldReturnError() {
-        dataManager = DataManager(dataServices: [])
-
-        XCTAssertNil(dataManager.create() as? LocalMockEntity)
     }
 }
