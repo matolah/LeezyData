@@ -17,7 +17,7 @@ enum DataManagementError: Error {
 }
 
 public final class DataManager: ObservableObject, DataManagerProtocol, ReferenceBuilderProtocol {
-    let dataServices: [any DataServiceProtocol]
+    private let dataServices: [any DataServiceProtocol]
 
     public init(dataServices: [any DataServiceProtocol]) {
         self.dataServices = dataServices
@@ -35,7 +35,7 @@ public final class DataManager: ObservableObject, DataManagerProtocol, Reference
         }
     }
 
-    func dataService<T: Entity>(_ entityType: T.Type) -> (any DataServiceProtocol<T>)? {
+    public func dataService<T: Entity>(_ entityType: T.Type) -> (any DataServiceProtocol<T>)? {
         for dataService in dataServices {
             if let match = dataService as? any DataServiceProtocol<T> {
                 return match

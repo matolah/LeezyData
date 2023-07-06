@@ -2,7 +2,7 @@
 
 import Foundation
 
-@testable import LeezyData
+@testable import LeezyRemoteCollection
 
 struct RemoteCollectionError: Error {}
 

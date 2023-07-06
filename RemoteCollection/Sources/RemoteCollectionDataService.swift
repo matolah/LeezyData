@@ -1,6 +1,7 @@
 // Created by Mateus Lino
 
 import Foundation
+import LeezyData
 
 final class RemoteCollectionDataService<T: RemoteEntity>: DataService<T> {
     typealias DataType = T

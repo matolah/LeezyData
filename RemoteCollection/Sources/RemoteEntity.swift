@@ -1,6 +1,7 @@
 // Created by Mateus Lino
 
 import Foundation
+import LeezyData
 
 struct EntityDecodingFailed: Error {}
 

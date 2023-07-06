@@ -3,7 +3,7 @@
 import Foundation
 import XCTest
 
-@testable import LeezyData
+@testable import LeezyRemoteCollection
 
 final class AnyRemoteEntityTests: XCTestCase {
     func test_mockRemoteEntityDecodingFromAnyEntity_whenIdentifierIsValid_shouldDecode() throws {

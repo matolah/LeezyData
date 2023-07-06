@@ -2,6 +2,7 @@
 
 import CoreData
 import Foundation
+import LeezyData
 
 protocol CoreDataDataServiceProtocol<DataType>: DataServiceProtocol where DataType: CoreDataEntity {
     func createEmpty() -> DataType?

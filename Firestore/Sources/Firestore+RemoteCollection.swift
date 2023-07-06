@@ -3,6 +3,7 @@
 import Firebase
 import FirebaseFirestoreSwift
 import Foundation
+import LeezyRemoteCollection
 
 extension Firestore: RemoteCollectionDatabase {
     public func collection(named collectionPath: String) -> RemoteCollection {

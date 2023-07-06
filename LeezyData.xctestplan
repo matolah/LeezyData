@@ -19,6 +19,14 @@
         "identifier" : "LeezyDataTests",
         "name" : "LeezyDataTests"
       }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "LeezyRemoteCollectionTests",
+        "name" : "LeezyRemoteCollectionTests"
+      }
     }
   ],
   "version" : 1

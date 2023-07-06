@@ -1,6 +1,7 @@
 // Created by Mateus Lino
 
 import CoreData
+import LeezyData
 
 class CoreDataEntity: NSManagedObject, Entity {
     static var referenceBuilder: ReferenceBuilderProtocol?

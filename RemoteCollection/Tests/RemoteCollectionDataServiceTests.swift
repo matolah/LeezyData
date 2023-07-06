@@ -2,7 +2,7 @@
 
 import XCTest
 
-@testable import LeezyData
+@testable import LeezyRemoteCollection
 
 final class RemoteCollectionDataServiceTests: XCTestCase {
     private var dataService: RemoteCollectionDataService<AnyRemoteEntity<AnyMockRemoteEntityIdentifier>>!
