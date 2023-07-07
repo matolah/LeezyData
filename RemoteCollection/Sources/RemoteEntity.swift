@@ -44,9 +44,5 @@ public final class AnyRemoteEntity<Identifier: AnyRemoteEntityIdentifier>: Remot
         let value = try metatype.init(from: decoder)
         self.init(value: value)
     }
-
-    public static func == (lhs: AnyRemoteEntity<Identifier>, rhs: AnyRemoteEntity<Identifier>) -> Bool {
-        return lhs.id == rhs.id
-    }
 }
 

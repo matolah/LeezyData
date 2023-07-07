@@ -3,16 +3,16 @@
 import Foundation
 import LeezyData
 
-final class RemoteCollectionDataService<T: RemoteEntity>: DataService<T> {
+public final class RemoteCollectionDataService<T: RemoteEntity>: DataService<T> {
     typealias DataType = T
 
     private let database: RemoteCollectionDatabase
 
-    init(database: RemoteCollectionDatabase) {
+    public init(database: RemoteCollectionDatabase) {
         self.database = database
     }
 
-    override func fetchAll() async -> Result<[T], Error> {
+    public override func fetchAll() async -> Result<[T], Error> {
         let collection = database
             .collection(named: T.collectionName)
 
@@ -27,11 +27,11 @@ final class RemoteCollectionDataService<T: RemoteEntity>: DataService<T> {
         }
     }
 
-    override func create(value: T) async -> Result<T, Error> {
+    public override func create(value: T) async -> Result<T, Error> {
         return await super.create(value: value)
     }
 
-    override func update(value: T) async -> Result<T, Error> {
+    public override func update(value: T) async -> Result<T, Error> {
         return await super.update(value: value)
     }
 }
