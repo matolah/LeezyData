@@ -18,7 +18,9 @@
 
 ## Should I use this package in my project?
 
-If you are building an app with remote data collections and/or a local database layer, then the answer is yes, you should use this package. `LeezyData` is a self-serve package, meaning you can choose to be completely agnostic from third-party libraries or `Swift` frameworks and build your own services, or you can add `LeezyData`'s built-in integration with `CoreData` (for your local database) and `Firestore` (for you remote data).
+If you are building an app with remote data collections and/or a local database layer, then the answer is yes, you should use this package.
+
+`LeezyData` is a self-serve package, meaning you can choose to be completely agnostic from third-party libraries or `Swift` frameworks and build your own services, or you can add `LeezyData`'s built-in integration with `CoreData` (for your local database) and `Firestore` (for you remote data).
 
 ### Overview of the contents
 
