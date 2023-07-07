@@ -16,18 +16,22 @@ let package = Package(
         .library(
             name: "LeezyCoreData",
             targets: [
+                "LeezyData",
                 "LeezyCoreData"
             ]
         ),
         .library(
             name: "LeezyRemoteCollection",
             targets: [
+                "LeezyData",
                 "LeezyRemoteCollection"
             ]
         ),
         .library(
             name: "LeezyFirestore",
             targets: [
+                "LeezyData",
+                "LeezyRemoteCollection",
                 "LeezyFirestore"
             ]
         )
@@ -38,14 +42,13 @@ let package = Package(
     targets: [
         .target(
             name: "LeezyData",
-            path: "Core/Sources"
+            path: "Common/Sources"
         ),
         .testTarget(
             name: "LeezyDataTests",
             dependencies: ["LeezyData"],
-            path: "Core/Tests"
+            path: "Common/Tests"
         ),
-
         .target(
             name: "LeezyCoreData",
             dependencies: [
@@ -53,7 +56,11 @@ let package = Package(
             ],
             path: "CoreData/Sources"
         ),
-
+        .testTarget(
+            name: "LeezyCoreDataTests",
+            dependencies: ["LeezyCoreData"],
+            path: "CoreData/Tests"
+        ),
         .target(
             name: "LeezyRemoteCollection",
             dependencies: [
@@ -66,7 +73,6 @@ let package = Package(
             dependencies: ["LeezyRemoteCollection"],
             path: "RemoteCollection/Tests"
         ),
-
         .target(
             name: "LeezyFirestore",
             dependencies: [
