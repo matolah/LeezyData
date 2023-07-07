@@ -4,22 +4,23 @@ import CoreData
 import Foundation
 import LeezyData
 
-protocol CoreDataDataServiceProtocol<DataType>: DataServiceProtocol where DataType: CoreDataEntity {
+public protocol CoreDataDataServiceProtocol<DataType>: DataServiceProtocol where DataType: CoreDataEntity {
     func createEmpty() -> DataType?
 }
 
-final class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreDataDataServiceProtocol {
+public final class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreDataDataServiceProtocol {
     typealias DataType = T
 
-    let managedObjectContext: NSManagedObjectContext
+    private let managedObjectContext: NSManagedObjectContext
 
-    init(managedObjectContext: NSManagedObjectContext) {
+    public init(managedObjectContext: NSManagedObjectContext) {
         self.managedObjectContext = managedObjectContext
     }
 
-    override func fetchAll() async -> Result<[T], Error> {
+    public override func fetchAll() async -> Result<[T], Error> {
         let request = T.fetchRequest()
         request.returnsObjectsAsFaults = false
+        
         do {
             latestValues = try managedObjectContext.fetch(request) as? [T] ?? []
 
@@ -29,13 +30,11 @@ final class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreDataData
         }
     }
 
-    override func create(value: T) async -> Result<T, Error> {
+    public override func create(value: T) async -> Result<T, Error> {
         do {
             managedObjectContext.insert(value)
 
             try managedObjectContext.save()
-
-            latestValues.append(value)
 
             return await super.create(value: value)
         } catch {
@@ -43,7 +42,7 @@ final class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreDataData
         }
     }
 
-    override func update(value: T) async -> Result<T, Error> {
+    public override func update(value: T) async -> Result<T, Error> {
         do {
             try managedObjectContext.save()
 
@@ -57,7 +56,7 @@ final class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreDataData
         }
     }
 
-    func createEmpty() -> T? {
+    public func createEmpty() -> T? {
         return NSEntityDescription.insertNewObject(
             forEntityName: T.entityName,
             into: managedObjectContext

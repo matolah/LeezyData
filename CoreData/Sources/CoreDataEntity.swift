@@ -3,17 +3,17 @@
 import CoreData
 import LeezyData
 
-class CoreDataEntity: NSManagedObject, Entity {
-    static var referenceBuilder: ReferenceBuilderProtocol?
-    static var coreDataEntityBuilder: CoreDataEntityBuilderProtocol?
+open class CoreDataEntity: NSManagedObject, Entity {
+    public static var referenceBuilder: ReferenceBuilderProtocol?
+    public static var coreDataEntityBuilder: CoreDataEntityBuilderProtocol?
 
-    static var entityName: String {
+    public static var entityName: String {
         return String(describing: Self.self)
     }
 
-    @NSManaged var id: String
+    @NSManaged public var id: String
 
-    static func create() -> Self? {
+    public static func create() -> Self? {
         return coreDataEntityBuilder?.create()
     }
 }
