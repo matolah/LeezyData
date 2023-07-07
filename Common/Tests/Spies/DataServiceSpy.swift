@@ -1,11 +1,12 @@
 // Created by Mateus Lino
 
+import Combine
 import Foundation
 
 @testable import LeezyData
 
 class DataServiceSpy<T: Entity>: DataServiceProtocol {
-    var latestValues = [T]()
+    var valuesSubject = CurrentValueSubject<[T], Error>([])
     
     private(set) var fetchAllCalled = false
     var entitiesResultToReturn: Result<[T], Error>!

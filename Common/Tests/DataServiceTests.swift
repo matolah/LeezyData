@@ -28,6 +28,8 @@ final class DataServiceTests: XCTestCase {
         switch result {
         case .success(let values):
             XCTAssertEqual(values, [entity])
+            XCTAssertEqual(dataService.latestValues, [entity])
+            XCTAssertEqual(dataService.valuesSubject.value, [entity])
         case .failure(let error):
             XCTFail(error.localizedDescription)
         }
@@ -38,6 +40,7 @@ final class DataServiceTests: XCTestCase {
         dataService.latestValues = [entity1]
 
         XCTAssertEqual(dataService.latestValues, [entity1])
+        XCTAssertEqual(dataService.valuesSubject.value, [entity1])
 
         let entity2 = MockEntity(id: "mock 2")
         let result = await dataService.create(value: entity2)
@@ -46,6 +49,7 @@ final class DataServiceTests: XCTestCase {
         case .success(let value):
             XCTAssertEqual(value, entity2)
             XCTAssertEqual(dataService.latestValues, [entity1, entity2])
+            XCTAssertEqual(dataService.valuesSubject.value, [entity1, entity2])
         case .failure(let error):
             XCTFail(error.localizedDescription)
         }

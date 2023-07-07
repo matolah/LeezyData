@@ -1,11 +1,12 @@
 // Created by Mateus Lino
 
+import Combine
 import Foundation
 
 public protocol DataServiceProtocol<DataType> {
     associatedtype DataType: Entity
 
-    var latestValues: [DataType] { get }
+    var valuesSubject: CurrentValueSubject<[DataType], Error> { get }
     func fetchAll() async -> Result<[DataType], Error>
     func create(value: DataType) async -> Result<DataType, Error>
     func update(value: DataType) async -> Result<DataType, Error>
@@ -14,7 +15,13 @@ public protocol DataServiceProtocol<DataType> {
 open class DataService<T: Entity>: DataServiceProtocol {
     public typealias DataType = T
 
-    public var latestValues = [T]()
+    public lazy var valuesSubject = CurrentValueSubject<[DataType], Error>(latestValues)
+
+    public var latestValues = [T]() {
+        didSet {
+            valuesSubject.send(latestValues)
+        }
+    }
 
     public init() {}
 
@@ -24,6 +31,7 @@ open class DataService<T: Entity>: DataServiceProtocol {
 
     open func create(value: T) async -> Result<T, Error> {
         latestValues.append(value)
+        
         return .success(value)
     }
 

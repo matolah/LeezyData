@@ -1,5 +1,6 @@
 // Created by Mateus Lino
 
+import Combine
 import XCTest
 
 @testable import LeezyData
@@ -22,30 +23,20 @@ final class DataManagerTests: XCTestCase {
         super.tearDown()
     }
 
-    func test_values_whenShouldNotRefetch_shouldReturnLatestLocalValues() async {
-        let mockEntity = mockEntity()
-        dataServiceSpy.latestValues.append(mockEntity)
+    func test_valuesSubject_shouldReturnSubjectWithLatestLocalValues() async {
+        let mockEntity = MockEntity()
+        dataServiceSpy.valuesSubject.send([mockEntity])
 
-        let result: Result<[MockEntity], Error> = await dataManager.values(shouldRefetch: false)
+        let subject: CurrentValueSubject<[MockEntity], Error> = dataManager.valuesSubject()
 
-        switch result {
-        case .success(let values):
-            XCTAssertFalse(dataServiceSpy.fetchAllCalled)
-            XCTAssertEqual(values, [mockEntity])
-        case .failure(let error):
-            XCTFail(error.localizedDescription)
-        }
+        XCTAssertEqual(subject.value, [mockEntity])
     }
 
-    private func mockEntity() -> MockEntity {
-        return MockEntity(id: UUID().uuidString)
-    }
-
-    func test_values_whenShouldRefetch_shouldReturnFetchedValues() async {
-        let mockEntity = mockEntity()
+    func test_refreshValues_shouldReturnLatestLocalValues() async {
+        let mockEntity = MockEntity()
         dataServiceSpy.entitiesResultToReturn = .success([mockEntity])
 
-        let result: Result<[MockEntity], Error> = await dataManager.values(shouldRefetch: true)
+        let result: Result<[MockEntity], Error> = await dataManager.refreshValues()
 
         switch result {
         case .success(let values):
@@ -59,7 +50,7 @@ final class DataManagerTests: XCTestCase {
     func test_values_whenDataServiceIsInvalid_shouldReturnError() async {
         dataManager = DataManager(dataServices: [])
 
-        let result: Result<[MockEntity], Error> = await dataManager.values(shouldRefetch: true)
+        let result: Result<[MockEntity], Error> = await dataManager.refreshValues()
 
         switch result {
         case .success:
@@ -70,7 +61,7 @@ final class DataManagerTests: XCTestCase {
     }
 
     func test_create_whenCreatedSuccessfully_shouldReturnCreatedEntity() async {
-        let mockEntity = mockEntity()
+        let mockEntity = MockEntity()
         dataServiceSpy.entityResultToReturn = .success(mockEntity)
 
         let result = await dataManager.create(value: mockEntity)
@@ -87,7 +78,7 @@ final class DataManagerTests: XCTestCase {
     func test_create_whenDataServiceIsInvalid_shouldReturnError() async {
         dataManager = DataManager(dataServices: [])
 
-        let result = await dataManager.create(value: mockEntity())
+        let result = await dataManager.create(value: MockEntity())
 
         switch result {
         case .success:
@@ -98,7 +89,7 @@ final class DataManagerTests: XCTestCase {
     }
 
     func test_update_whenUpdatedSuccessfully_shouldReturnUpdatedEntity() async {
-        let mockEntity = mockEntity()
+        let mockEntity = MockEntity()
         dataServiceSpy.entityResultToReturn = .success(mockEntity)
 
         let result = await dataManager.update(value: mockEntity)
@@ -115,7 +106,7 @@ final class DataManagerTests: XCTestCase {
     func test_update_whenDataServiceIsInvalid_shouldReturnError() async {
         dataManager = DataManager(dataServices: [])
 
-        let result = await dataManager.update(value: mockEntity())
+        let result = await dataManager.update(value: MockEntity())
 
         switch result {
         case .success:
@@ -123,5 +114,31 @@ final class DataManagerTests: XCTestCase {
         case .failure(let error):
             XCTAssertTrue(error as? DataManagementError == DataManagementError.serviceNotFound)
         }
+    }
+
+    func test_entity_whenFoundMatch_shouldReturnMatchedEntity() async {
+        let entity1 = MockEntity()
+        let entity2 = MockEntity()
+        dataServiceSpy.valuesSubject.send([entity1, entity2])
+
+        XCTAssertEqual(dataManager.entity(with: entity2.id), entity2)
+    }
+
+    func test_entity_whenThereIsNoMatch_shouldReturnNil() async {
+        let entity1 = MockEntity()
+        let entity2 = MockEntity()
+        dataServiceSpy.valuesSubject.send([entity1, entity2])
+
+        let value: MockEntity? = dataManager.entity(with: String(entity2.id.dropFirst()))
+
+        XCTAssertNil(value)
+    }
+
+    func test_entity_whenDataServiceIsInvalid_shouldReturnNil() async {
+        dataManager = DataManager(dataServices: [])
+
+        let value: MockEntity? = dataManager.entity(with: "")
+
+        XCTAssertNil(value)
     }
 }

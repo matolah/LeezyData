@@ -7,11 +7,7 @@ import Foundation
 class MockEntity: Entity, Decodable {
     var id: String
 
-    init(id: String) {
+    init(id: String = UUID().uuidString) {
         self.id = id
-    }
-
-    static func == (lhs: MockEntity, rhs: MockEntity) -> Bool {
-        return lhs.id == rhs.id
     }
 }

@@ -1,11 +1,13 @@
 // Created by Mateus Lino
 
+import Combine
 import Foundation
 
 public protocol DataManagerProtocol {
-    func values<T: Entity>(shouldRefetch: Bool) async -> Result<[T], Error>
-    func create<T: Entity>(value: T) async -> Result<T, Error>
-    func update<T: Entity>(value: T) async -> Result<T, Error>
+    func valuesSubject<T: Entity>() -> CurrentValueSubject<[T], Error>
+    @discardableResult func refreshValues<T: Entity>() async -> Result<[T], Error>
+    @discardableResult func create<T: Entity>(value: T) async -> Result<T, Error>
+    @discardableResult func update<T: Entity>(value: T) async -> Result<T, Error>
 }
 
 public protocol ReferenceBuilderProtocol {
@@ -17,22 +19,28 @@ enum DataManagementError: Error {
 }
 
 public final class DataManager: ObservableObject, DataManagerProtocol, ReferenceBuilderProtocol {
-    private let dataServices: [any DataServiceProtocol]
+    public let dataServices: [any DataServiceProtocol]
 
     public init(dataServices: [any DataServiceProtocol]) {
         self.dataServices = dataServices
     }
 
-    public func values<T: Entity>(shouldRefetch: Bool) async -> Result<[T], Error> {
+    public func valuesSubject<T: Entity>() -> CurrentValueSubject<[T], Error> {
+        guard let dataService = dataService(T.self) else {
+            let subject = CurrentValueSubject<[T], Error>([])
+            subject.send(completion: .failure(DataManagementError.serviceNotFound))
+            return subject
+        }
+
+        return dataService.valuesSubject
+    }
+
+    public func refreshValues<T: Entity>() async -> Result<[T], Error> {
         guard let dataService = dataService(T.self) else {
             return .failure(DataManagementError.serviceNotFound)
         }
 
-        if shouldRefetch {
-            return await dataService.fetchAll()
-        } else {
-            return .success(dataService.latestValues)
-        }
+        return await dataService.fetchAll()
     }
 
     public func dataService<T: Entity>(_ entityType: T.Type) -> (any DataServiceProtocol<T>)? {
@@ -41,6 +49,7 @@ public final class DataManager: ObservableObject, DataManagerProtocol, Reference
                 return match
             }
         }
+        
         return nil
     }
 
@@ -62,7 +71,7 @@ public final class DataManager: ObservableObject, DataManagerProtocol, Reference
 
     public func entity<T: Entity>(with id: String) -> T? {
         let dataService = dataService(T.self)
-        return dataService?.latestValues.first(where: {
+        return dataService?.valuesSubject.value.first(where: {
             $0.id == id
         })
     }
