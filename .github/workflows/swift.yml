@@ -16,6 +16,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Select Xcode
+      run: sudo xcode-select -s "/Applications/Xcode_14.3.app"
+      env:
+          destination: 'platform=iOS Simulator,name=iPhone 14 Pro Max,OS=16.0'
     - name: Build
       run: swift build -v
     - name: Run tests
