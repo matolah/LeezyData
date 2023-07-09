@@ -1,0 +1,40 @@
+# This file was last updated based on SwiftLint v0.51.0
+
+disabled_rules:
+  - colon
+  - force_cast
+  - force_try
+  - function_default_parameter_at_end # Causes more false positives than helps.
+  - identifier_name
+  - line_length
+  - nesting
+  - redundant_string_enum_value # The fact that this rule exists, and is enabled by default… I just can't comprehend. 😰
+  - todo
+  - file_length
+
+excluded: # paths to ignore during linting. Takes precedence over `included`.
+  - "*/**/Package.swift"
+  - ".swiftpm" # Level 0
+  - "*/.swiftpm" # Level 1
+  - "*/**/.swiftpm" # Level 2
+  - "build" # Level 0
+  - "*/build" # Level 1
+  - "*/**/build" # Level 2
+  - ".bundle" # Level 0
+  - "*/.bundle" # Level 1
+  - "*/**/.bundle" # Level 2
+
+opt_in_rules:
+  - xct_specific_matcher
+  - operator_usage_whitespace
+
+# Customized rules
+trailing_comma:
+  mandatory_comma: true
+
+function_parameter_count:
+  warning: 8
+  error: 12
+function_body_length:
+  warning: 80
+  error: 120
