@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-13.4
+    runs-on: macos-latest
     
     steps:
       - uses: actions/checkout@v3
