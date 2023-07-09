@@ -8,6 +8,8 @@ public protocol RemoteCollectionDatabase {
 
 public protocol RemoteCollection {
     func documents() async throws -> [RemoteCollectionDocument]
+    func addDocument<T: Codable>(_ value: T) async throws -> T
+    func updateDocument<T: Codable>(_ value: T, id: String) async throws
 }
 
 public protocol RemoteCollectionDocument {

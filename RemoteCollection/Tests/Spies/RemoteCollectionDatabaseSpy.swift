@@ -22,6 +22,11 @@ final class RemoteCollectionSpy: RemoteCollection {
     private(set) var documentsCalled = false
     var shouldReturnError = false
     var documentsToReturn = [any RemoteCollectionDocument]()
+    private(set) var addDocumentCalled = false
+    private(set) var valuePassed: (any Codable)?
+    var valueToReturn: (any Codable)!
+    private(set) var updateDocumentCalled = false
+    private(set) var idPassed: String?
 
     func documents() async throws -> [RemoteCollectionDocument] {
         documentsCalled = true
@@ -29,6 +34,24 @@ final class RemoteCollectionSpy: RemoteCollection {
             throw RemoteCollectionError()
         }
         return documentsToReturn
+    }
+
+    func addDocument<T: Codable>(_ value: T) async throws -> T {
+        addDocumentCalled = true
+        valuePassed = value
+        if shouldReturnError {
+            throw RemoteCollectionError()
+        }
+        return valueToReturn as! T
+    }
+
+    func updateDocument<T: Codable>(_ value: T, id: String) async throws {
+        updateDocumentCalled = true
+        valuePassed = value
+        idPassed = id
+        if shouldReturnError {
+            throw RemoteCollectionError()
+        }
     }
 }
 

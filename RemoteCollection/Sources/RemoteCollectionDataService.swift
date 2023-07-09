@@ -13,11 +13,8 @@ public final class RemoteCollectionDataService<T: RemoteEntity>: DataService<T> 
     }
 
     public override func fetchAll() async -> Result<[T], Error> {
-        let collection = database
-            .collection(named: T.collectionName)
-
         do {
-            latestValues = try await collection.documents().map {
+            latestValues = try await collection().documents().map {
                 return try $0.decoded(as: T.self)
             }
 
@@ -27,11 +24,28 @@ public final class RemoteCollectionDataService<T: RemoteEntity>: DataService<T> 
         }
     }
 
+    private func collection() -> RemoteCollection {
+        return database
+            .collection(named: T.collectionName)
+    }
+
     public override func create(value: T) async -> Result<T, Error> {
-        return await super.create(value: value)
+        do {
+            let value = try await collection().addDocument(value)
+
+            return await super.create(value: value)
+        } catch {
+            return .failure(error)
+        }
     }
 
     public override func update(value: T) async -> Result<T, Error> {
-        return await super.update(value: value)
+        do {
+            try await collection().updateDocument(value, id: value.id)
+
+            return await super.update(value: value)
+        } catch {
+            return .failure(error)
+        }
     }
 }

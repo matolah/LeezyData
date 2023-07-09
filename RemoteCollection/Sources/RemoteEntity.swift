@@ -5,12 +5,15 @@ import LeezyData
 
 struct EntityDecodingFailed: Error {}
 
-public protocol RemoteEntity: Entity, Decodable {
+struct EntityEncodingFailed: Error {}
+
+public protocol RemoteEntity: Entity, Codable {
     static var collectionName: String { get }
 }
 
-public protocol AnyRemoteEntityIdentifier {
+public protocol AnyRemoteEntityIdentifier: CaseIterable {
     static var collectionName: String { get }
+    var rawValue: String { get }
     var metatype: any RemoteEntity.Type { get }
     init?(rawValue: String)
 }
@@ -18,7 +21,6 @@ public protocol AnyRemoteEntityIdentifier {
 public final class AnyRemoteEntity<Identifier: AnyRemoteEntityIdentifier>: RemoteEntity {
     private enum CodingKeys: String, CodingKey {
         case identifier
-        case content
     }
 
     public static var collectionName: String {
@@ -44,5 +46,16 @@ public final class AnyRemoteEntity<Identifier: AnyRemoteEntityIdentifier>: Remot
         let value = try metatype.init(from: decoder)
         self.init(value: value)
     }
-}
 
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        let identifier = Identifier.allCases.first {
+            return $0.metatype == type(of: value)
+        }
+        guard let identifier else {
+            throw EntityEncodingFailed()
+        }
+        try container.encode(identifier.rawValue, forKey: .identifier)
+        try value.encode(to: encoder)
+    }
+}

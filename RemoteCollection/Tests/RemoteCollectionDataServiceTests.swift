@@ -58,4 +58,85 @@ final class RemoteCollectionDataServiceTests: XCTestCase {
             XCTAssertTrue(error is RemoteCollectionError)
         }
     }
+
+    func test_create_whenCreationIsSuccessful_shouldReturnValue() async {
+        let collection = RemoteCollectionSpy()
+        let entity = MockRemoteEntity(id: "")
+        let anyEntity = AnyRemoteEntity<AnyMockRemoteEntityIdentifier>(value: entity)
+        collection.valueToReturn = anyEntity
+        databaseSpy.remoteCollectionToReturn = collection
+
+        let result = await dataService.create(value: anyEntity)
+
+        XCTAssertTrue(databaseSpy.collectionCalled)
+        XCTAssertTrue(collection.addDocumentCalled)
+        switch result {
+        case .success(let value):
+            XCTAssertEqual(value, anyEntity)
+            XCTAssertEqual(dataService.latestValues, [anyEntity])
+        case .failure:
+            XCTFail()
+        }
+    }
+
+    func test_create_whenCreationFailed_shouldReturnError() async {
+        let collection = RemoteCollectionSpy()
+        let entity = MockRemoteEntity(id: "")
+        let anyEntity = AnyRemoteEntity<AnyMockRemoteEntityIdentifier>(value: entity)
+        collection.shouldReturnError = true
+        collection.valueToReturn = anyEntity
+        databaseSpy.remoteCollectionToReturn = collection
+
+        let result = await dataService.create(value: anyEntity)
+
+        XCTAssertTrue(databaseSpy.collectionCalled)
+        XCTAssertTrue(collection.addDocumentCalled)
+        switch result {
+        case .success:
+            XCTFail()
+        case .failure(let error):
+            XCTAssertTrue(error is RemoteCollectionError)
+        }
+    }
+
+    func test_update_whenUpdateIsSuccessful_shouldReturnValue() async {
+        let collection = RemoteCollectionSpy()
+        let entity = MockRemoteEntity(id: "mock123")
+        let anyEntity = AnyRemoteEntity<AnyMockRemoteEntityIdentifier>(value: entity)
+        collection.valueToReturn = anyEntity
+        databaseSpy.remoteCollectionToReturn = collection
+        dataService.latestValues = [anyEntity]
+
+        let result = await dataService.update(value: anyEntity)
+
+        XCTAssertTrue(databaseSpy.collectionCalled)
+        XCTAssertTrue(collection.updateDocumentCalled)
+        switch result {
+        case .success(let value):
+            XCTAssertEqual(value, anyEntity)
+            XCTAssertEqual(dataService.latestValues, [anyEntity])
+        case .failure:
+            XCTFail()
+        }
+    }
+
+    func test_update_whenUpdateFailed_shouldReturnError() async {
+        let collection = RemoteCollectionSpy()
+        let entity = MockRemoteEntity(id: "mock123")
+        let anyEntity = AnyRemoteEntity<AnyMockRemoteEntityIdentifier>(value: entity)
+        collection.shouldReturnError = true
+        collection.valueToReturn = anyEntity
+        databaseSpy.remoteCollectionToReturn = collection
+
+        let result = await dataService.update(value: anyEntity)
+
+        XCTAssertTrue(databaseSpy.collectionCalled)
+        XCTAssertTrue(collection.updateDocumentCalled)
+        switch result {
+        case .success:
+            XCTFail()
+        case .failure(let error):
+            XCTAssertTrue(error is RemoteCollectionError)
+        }
+    }
 }

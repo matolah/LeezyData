@@ -15,6 +15,16 @@ extension CollectionReference: RemoteCollection {
     public func documents() async throws -> [RemoteCollectionDocument] {
         return try await getDocuments().documents
     }
+
+    public func addDocument<T: Codable>(_ value: T) async throws -> T {
+        return try await addDocument(data: value.dictionary)
+            .getDocument()
+            .decoded(as: T.self)
+    }
+
+    public func updateDocument<T: Codable>(_ value: T, id: String) async throws {
+        try await document(id).updateData(value.trimmedNilDictionary)
+    }
 }
 
 extension DocumentSnapshot: RemoteCollectionDocument {
