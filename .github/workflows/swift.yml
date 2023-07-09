@@ -21,12 +21,5 @@ jobs:
         uses: slashmo/install-swift@v0.2.1
         with:
           version: 5.8
-      - name: Build
-        run: |
-          cd GitHubActions
-          xcodebuild build -project GitHubActions.xcodeproj -scheme GitHubActions clean build -sdk iphoneos CODE_SIGNING_ALLOWED=No
-
-      - name: Run tests
-        run: |
-          cd GitHubActions
-          xcodebuild test -project GitHubActions.xcodeproj -scheme GitHubActions clean build -sdk iphoneos -destination "platform=iOS Simulator,OS=16.1,name=iPhone 14 Pro Max" CODE_SIGNING_ALLOWED=No
+      - name: Build and test ( iOS 16.0)
+        run: xcodebuild test -scheme LeezyData -destination 'platform=iOS Simulator,OS=16.0,name=iPhone 14 Pro Max'
