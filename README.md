@@ -129,4 +129,4 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-Twitter - [@_matolah](https://twitter.com/_matolah)
+Twitter: [@_matolah](https://twitter.com/_matolah)
