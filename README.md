@@ -1,9 +1,6 @@
 <a name="readme-top"></a>
 
 <div align="center">
-    <img src="https://github.com/matolah/LeezyData/assets/26446518/bdcb3d9e-db05-44d3-bd55-4d936511a237" alt="Logo" width="15%">
-  </a>
-
   <h3 align="center">LeezyData</h3>
 
   <p align="center">
