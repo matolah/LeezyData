@@ -7,15 +7,13 @@
   <h3 align="center">LeezyData</h3>
 
   <p align="center">
-    A generic and agnostic entity-oriented data layer.
-    <br />
-    <br />
     <a href="https://github.com/matolah/LeezyData/issues">Report Bug</a>
     ·
     <a href="https://github.com/matolah/LeezyData/issues">Request Feature</a>
   </p>
 </div>
 
+LeezyData is a generic and agnostic entity-oriented data layer.
 - [About](#about)
 - [Installation](#installation)
 - [Usage](#usage)
