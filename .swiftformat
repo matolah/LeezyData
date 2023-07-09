@@ -1,0 +1,153 @@
+#
+#
+# PLEASE READ THIS BEFORE MODIFYING THIS FILE.
+#
+#
+# This is a config file for SwiftFormat: https://github.com/nicklockwood/SwiftFormat/
+# Last file was last updated on:
+#
+#     $ date '+%B %d %Y'
+#     April 26 2023
+#     $ Pods/SwiftFormat/CommandLineTool/swiftformat --version
+#     0.51.6
+#
+# with these Rules: https://github.com/nicklockwood/SwiftFormat/blob/02066042e81eba28470c41c2548fb2ad27ed1c0f/Rules.md
+#
+# When updating these rules, check the diff between the commit above and the latest Rules.md, then update the date and link above.
+# Then explicitly declare all rules, even the default implementations. This makes it easier for the developer to know whether we consciously decided on a rule's behavior or not.
+# You can check the diff between the last file and the current one using this link:
+# https://github.com/nicklockwood/SwiftFormat/compare/<old_commit_hash>..<latest_commit_hash>
+
+# Exclude folders we don't want to lint.
+--exclude "**/Pods/**"
+--exclude "**/.swiftpm/**"
+--exclude "**/.build/**"
+--exclude "**/build/**"
+--exclude "**/.bundle/**"
+
+# Rules
+--enable andOperator
+--enable anyObjectProtocol
+--enable blankLinesAroundMark
+--lineaftermarks false
+--enable blankLinesAtEndOfScope
+--enable blankLinesAtStartOfScope
+--typeblanklines remove
+--enable blankLinesBetweenScopes
+--allman false
+--enable consecutiveBlankLines
+--enable consecutiveSpaces
+--enable duplicateImports
+--elseposition same-line
+--guardelse auto
+--emptybraces spaced
+--enable enumNamespaces
+--enumnamespaces always
+--extensionacl on-extension
+--header ignore
+--enable hoistPatternLet
+--patternlet inline
+--indent 4
+--tabwidth 4
+--smarttabs enabled
+--indentcase false
+--ifdef indent
+--xcodeindentation disabled
+--enable initCoderUnavailable
+--enable isEmpty
+--enable leadingDelimiters
+--linebreaks lf
+--enable markTypes
+--marktypes never
+--typemark "MARK: - %t"
+--markextensions always
+--extensionmark "MARK: - %t conformance to %c"
+--groupedextension "MARK: %c"
+--enable modifierorder
+--decimalgrouping 3,5
+--octalgrouping ignore
+--hexgrouping ignore
+--fractiongrouping disabled
+--exponentgrouping disabled
+--hexliteralcase uppercase
+--exponentcase uppercase
+--disable organizeDeclarations # Creates too much turmoil in an existing codebase.
+--enable preferKeyPath
+--enable redundantBackticks
+--enable redundantBreak
+--enable redundantExtensionACL
+--enable redundantFileprivate
+--enable redundantGet
+--enable redundantInit
+--enable redundantLet
+--enable redundantLetError
+--enable redundantNilInit
+--enable redundantObjc
+--enable redundantParens
+--enable redundantPattern
+--disable redundantRawValues
+--disable redundantReturn
+--self init-only
+--enable redundantType
+--redundanttype inferred
+--enable redundantVoidReturnType
+--closurevoid remove
+--semicolons inline
+--importgrouping testable-first
+--disable sortedSwitchCases
+--enable spaceAroundBraces
+--enable spaceAroundBrackets
+--enable spaceAroundComments
+--enable spaceAroundGenerics
+--enable spaceAroundOperators
+--ranges no-space
+--enable spaceAroundParens
+--enable spaceInsideBraces
+--disable spaceInsideBrackets
+--enable spaceInsideComments
+--enable spaceInsideGenerics
+--enable spaceInsideParens
+--enable strongOutlets
+--enable strongifiedSelf
+--enable todos
+--disable trailingClosures
+--commas always
+--trimwhitespace always
+--shortoptionals always
+--stripunusedargs closure-only
+--voidtype void
+--disable wrap
+--enable wrapArguments
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
+--closingparen balanced
+--wrapreturntype preserve
+--wrapconditions preserve
+--wraptypealiases preserve
+--wrapeffects if-multiline
+--funcattributes prev-line
+--typeattributes prev-line
+--varattributes preserve
+--disable wrapEnumCases
+--disable wrapMultilineStatementBraces
+--disable wrapSwitchCases
+--yodaswap always
+--enable assertionFailures
+--enable blankLineAfterImports
+--enable blankLinesBetweenImports
+--enable blockComments
+--enable conditionalAssignment
+--enable docComments
+--disable fileHeader
+--enable genericExtensions
+--enable hoistAwait
+--enable hoistTry
+--disable opaqueGenericParameters # Too confusing for now, maybe enable in the future
+--enable redundantClosure
+--disable sortDeclarations
+--disable wrapConditionalBodies
+--disable wrapSingleLineComments
+--enable acronyms
+--acronyms ID,URL,UUID,HTML
+--enable redundantOptionalBinding
