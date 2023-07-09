@@ -85,7 +85,7 @@ class MyLocalEntity: CoreDataEntity {
 typealias AnyRemoteFirestoreEntity = AnyRemoteEntity<MyRemoteEntityIdentifier>
 
 struct MyRemoteEntity: RemoteEntity {
-    static var collectionName = "my-remote-entity-collection"
+    static let collectionName = MyRemoteEntityIdentifier.collectionName
 
     let id: String
 }
@@ -93,7 +93,7 @@ struct MyRemoteEntity: RemoteEntity {
 enum MyRemoteEntityIdentifier: String, AnyRemoteEntityIdentifier {
     case mock
 
-    static var collectionName = "my-remote-entity-collection"
+    static let collectionName = "my-remote-entity-collection"
 
     var metatype: any RemoteEntity.Type {
         switch self {
