@@ -18,13 +18,37 @@ public final class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreD
     }
 
     public override func fetchAll() async -> Result<[T], Error> {
-        let request = T.fetchRequest()
-        request.returnsObjectsAsFaults = false
-        
         do {
-            latestValues = try managedObjectContext.fetch(request) as? [T] ?? []
+            latestValues = try fetchValues(withPredicate: nil)
 
             return await super.fetchAll()
+        } catch {
+            return .failure(error)
+        }
+    }
+
+    private func fetchValues(withPredicate predicate: NSPredicate?) throws -> [T] {
+        let request = T.fetchRequest()
+        request.returnsObjectsAsFaults = false
+        request.predicate = predicate
+        return try managedObjectContext.fetch(request) as? [T] ?? []
+    }
+
+    public override func fetch(by id: String) async -> Result<T?, Error> {
+        do {
+            let predicate = NSPredicate(
+                format: "id = %@", id
+            )
+
+            let values = try fetchValues(withPredicate: predicate)
+
+            guard let value = values.first else {
+                return .success(nil)
+            }
+
+            updateLatestValue(with: value)
+
+            return await super.fetch(by: id)
         } catch {
             return .failure(error)
         }
@@ -45,10 +69,6 @@ public final class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreD
     public override func update(value: T) async -> Result<T, Error> {
         do {
             try managedObjectContext.save()
-
-            if let index = latestValues.firstIndex(where: { $0.id == value.id }) {
-                latestValues[index] = value
-            }
 
             return await super.update(value: value)
         } catch {

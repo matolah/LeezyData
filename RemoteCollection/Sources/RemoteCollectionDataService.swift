@@ -24,6 +24,20 @@ public final class RemoteCollectionDataService<T: RemoteEntity>: DataService<T> 
         }
     }
 
+    public override func fetch(by id: String) async -> Result<T?, Error> {
+        do {
+            guard let value = try await collection().document(by: id)?.decoded(as: T.self) else {
+                return .success(nil)
+            }
+
+            updateLatestValue(with: value)
+
+            return await super.fetch(by: id)
+        } catch {
+            return .failure(error)
+        }
+    }
+
     private func collection() -> RemoteCollection {
         return database
             .collection(named: T.collectionName)

@@ -16,6 +16,10 @@ extension CollectionReference: RemoteCollection {
         return try await getDocuments().documents
     }
 
+    public func document(by id: String) async throws -> RemoteCollectionDocument? {
+        return try await document(id).getDocument()
+    }
+
     public func addDocument<T: Codable>(_ value: T) async throws -> T {
         return try await addDocument(data: value.dictionary)
             .getDocument()
