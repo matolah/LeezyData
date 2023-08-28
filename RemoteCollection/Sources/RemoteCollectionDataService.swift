@@ -3,7 +3,7 @@
 import Foundation
 import LeezyData
 
-public final class RemoteCollectionDataService<T: RemoteEntity>: DataService<T> {
+open class RemoteCollectionDataService<T: RemoteEntity>: DataService<T> {
     typealias DataType = T
 
     private let database: RemoteCollectionDatabase
@@ -12,7 +12,7 @@ public final class RemoteCollectionDataService<T: RemoteEntity>: DataService<T> 
         self.database = database
     }
 
-    public override func fetchAll() async -> Result<[T], Error> {
+    open override func fetchAll() async -> Result<[T], Error> {
         do {
             latestValues = try await collection().documents().map {
                 return try $0.decoded(as: T.self)
@@ -24,7 +24,7 @@ public final class RemoteCollectionDataService<T: RemoteEntity>: DataService<T> 
         }
     }
 
-    public override func fetch(by id: String) async -> Result<T?, Error> {
+    open override func fetch(by id: String) async -> Result<T?, Error> {
         do {
             guard let value = try await collection().document(by: id)?.decoded(as: T.self) else {
                 return .success(nil)
@@ -43,7 +43,7 @@ public final class RemoteCollectionDataService<T: RemoteEntity>: DataService<T> 
             .collection(named: T.collectionName)
     }
 
-    public override func create(value: T) async -> Result<T, Error> {
+    open override func create(value: T) async -> Result<T, Error> {
         do {
             let value = try await collection().addDocument(value)
 
@@ -53,7 +53,7 @@ public final class RemoteCollectionDataService<T: RemoteEntity>: DataService<T> 
         }
     }
 
-    public override func update(value: T) async -> Result<T, Error> {
+    open override func update(value: T) async -> Result<T, Error> {
         do {
             try await collection().updateDocument(value, id: value.id)
 

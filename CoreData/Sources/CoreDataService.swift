@@ -8,7 +8,7 @@ public protocol CoreDataDataServiceProtocol<DataType>: DataServiceProtocol where
     func createEmpty() -> DataType?
 }
 
-public final class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreDataDataServiceProtocol {
+open class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreDataDataServiceProtocol {
     typealias DataType = T
 
     private let managedObjectContext: NSManagedObjectContext
@@ -17,7 +17,7 @@ public final class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreD
         self.managedObjectContext = managedObjectContext
     }
 
-    public override func fetchAll() async -> Result<[T], Error> {
+    open override func fetchAll() async -> Result<[T], Error> {
         do {
             latestValues = try fetchValues(withPredicate: nil)
 
@@ -34,7 +34,7 @@ public final class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreD
         return try managedObjectContext.fetch(request) as? [T] ?? []
     }
 
-    public override func fetch(by id: String) async -> Result<T?, Error> {
+    open override func fetch(by id: String) async -> Result<T?, Error> {
         do {
             let predicate = NSPredicate(
                 format: "id = %@", id
@@ -54,7 +54,7 @@ public final class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreD
         }
     }
 
-    public override func create(value: T) async -> Result<T, Error> {
+    open override func create(value: T) async -> Result<T, Error> {
         do {
             managedObjectContext.insert(value)
 
@@ -66,7 +66,7 @@ public final class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreD
         }
     }
 
-    public override func update(value: T) async -> Result<T, Error> {
+    open override func update(value: T) async -> Result<T, Error> {
         do {
             try managedObjectContext.save()
 
@@ -76,7 +76,7 @@ public final class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreD
         }
     }
 
-    public func createEmpty() -> T? {
+    open func createEmpty() -> T? {
         return NSEntityDescription.insertNewObject(
             forEntityName: T.entityName,
             into: managedObjectContext
