@@ -17,7 +17,6 @@ public protocol RemoteCollectionDocument {
     func decoded<T: Decodable>(as type: T.Type) throws -> T
 }
 
-#if DEBUG
 public struct MockRemoteCollectionDatabase: RemoteCollectionDatabase {
     public init() {}
     
@@ -41,4 +40,3 @@ struct MockRemoteCollection: RemoteCollection {
 
     func updateDocument<T: Codable>(_ value: T, id: String) async throws {}
 }
-#endif
