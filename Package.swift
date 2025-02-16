@@ -37,7 +37,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "10.11.0"))
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "11.8.1"))
     ],
     targets: [
         .target(
@@ -77,7 +77,7 @@ let package = Package(
             name: "LeezyFirestore",
             dependencies: [
                 "LeezyRemoteCollection",
-                .product(name: "FirebaseFirestoreSwift", package: "firebase-ios-sdk")
+                .product(name: "FirebaseFirestore", package: "firebase-ios-sdk")
             ],
             path: "Firestore/Sources"
         ),

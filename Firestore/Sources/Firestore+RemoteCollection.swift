@@ -1,7 +1,7 @@
 // Created by Mateus Lino
 
 import Firebase
-import FirebaseFirestoreSwift
+import FirebaseFirestore
 import Foundation
 import LeezyRemoteCollection
 
