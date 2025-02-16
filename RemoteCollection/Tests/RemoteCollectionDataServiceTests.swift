@@ -59,6 +59,57 @@ final class RemoteCollectionDataServiceTests: XCTestCase {
         }
     }
 
+    func test_fetchById_whenEntityExists_shouldReturnEntity() async {
+        let collection = RemoteCollectionSpy()
+        let document = MockRemoteCollectionDocument()
+        let entity = MockRemoteEntity(id: "mock123")
+        let anyEntity = AnyRemoteEntity<AnyMockRemoteEntityIdentifier>(value: entity)
+        document.decodedToReturn = anyEntity
+        collection.documentToReturn = document
+        databaseSpy.remoteCollectionToReturn = collection
+
+        let result = await dataService.fetch(by: "mock123")
+
+        XCTAssertTrue(databaseSpy.collectionCalled)
+        switch result {
+        case .success(let value):
+            XCTAssertEqual(value, anyEntity)
+        case .failure:
+            XCTFail()
+        }
+    }
+
+    func test_fetchById_whenEntityDoesNotExist_shouldReturnNil() async {
+        let collection = RemoteCollectionSpy()
+        databaseSpy.remoteCollectionToReturn = collection
+
+        let result = await dataService.fetch(by: "nonexistent_id")
+
+        XCTAssertTrue(databaseSpy.collectionCalled)
+        switch result {
+        case .success(let value):
+            XCTAssertNil(value)
+        case .failure:
+            XCTFail()
+        }
+    }
+
+    func test_fetchById_whenFetchFails_shouldReturnError() async {
+        let collection = RemoteCollectionSpy()
+        collection.shouldReturnError = true
+        databaseSpy.remoteCollectionToReturn = collection
+
+        let result = await dataService.fetch(by: "mock123")
+
+        XCTAssertTrue(databaseSpy.collectionCalled)
+        switch result {
+        case .success:
+            XCTFail()
+        case .failure(let error):
+            XCTAssertTrue(error is RemoteCollectionError)
+        }
+    }
+
     func test_create_whenCreationIsSuccessful_shouldReturnValue() async {
         let collection = RemoteCollectionSpy()
         let entity = MockRemoteEntity(id: "")
