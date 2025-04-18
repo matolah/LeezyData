@@ -16,11 +16,21 @@ public protocol DataServiceProtocol<DataType> {
 open class DataService<T: Entity>: DataServiceProtocol {
     public typealias DataType = T
 
+    private var _latestValues = [T]()
+    private let queue = DispatchQueue(label: "dataservice.queue.\(UUID())", attributes: .concurrent)
     public lazy var valuesSubject = CurrentValueSubject<[DataType], Error>(latestValues)
 
-    public var latestValues = [T]() {
-        didSet {
-            valuesSubject.send(latestValues)
+    public var latestValues: [T] {
+        get {
+            queue.sync {
+                _latestValues
+            }
+        }
+        set {
+            queue.async(flags: .barrier) { [weak self] in
+                self?._latestValues = newValue
+                self?.valuesSubject.send(newValue)
+            }
         }
     }
 
@@ -38,22 +48,29 @@ open class DataService<T: Entity>: DataServiceProtocol {
     }
 
     open func create(value: T) async -> Result<T, Error> {
-        latestValues.append(value)
-
-        return .success(value)
-    }
-
-    open func update(value: T) async -> Result<T, Error> {
         updateLatestValue(with: value)
-
         return .success(value)
     }
 
     public func updateLatestValue(with value: T) {
-        if let index = latestValues.firstIndex(where: { $0.id == value.id }) {
-            latestValues[index] = value
-        } else {
-            latestValues.append(value)
+        queue.async(flags: .barrier) { [weak self] in
+            guard let self else {
+                return
+            }
+
+            let index = self._latestValues.firstIndex(where: { $0.id == value.id })
+            if let index {
+                self._latestValues[index] = value
+            } else {
+                self._latestValues.append(value)
+            }
+
+            self.valuesSubject.send(self._latestValues)
         }
+    }
+
+    open func update(value: T) async -> Result<T, Error> {
+        updateLatestValue(with: value)
+        return .success(value)
     }
 }
