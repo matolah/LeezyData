@@ -32,4 +32,8 @@ jobs:
         run: swiftformat .
 
       - name: Run unit tests
-        run: swift test
+        run: |
+            xcodebuild test \
+                -scheme LeezyData-Package \
+                -destination 'platform=iOS Simulator,name=iPhone 16' \
+                -sdk iphonesimulator
