@@ -18,7 +18,7 @@ open class DataService<T: Entity>: DataServiceProtocol {
 
     private var _latestValues = [T]()
     private let queue = DispatchQueue(label: "dataservice.queue.\(UUID())", attributes: .concurrent)
-    public lazy var valuesSubject = CurrentValueSubject<[DataType], Error>(latestValues)
+    public lazy var valuesSubject = CurrentValueSubject<[DataType], Error>(_latestValues)
 
     public var latestValues: [T] {
         get {
