@@ -15,6 +15,6 @@ extension DataManager: CoreDataEntityBuilderProtocol {
             return nil
         }
         newValue.id = UUID().uuidString
-        return newValue as? T
+        return newValue
     }
 }

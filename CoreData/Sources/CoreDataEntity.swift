@@ -4,8 +4,8 @@ import CoreData
 import LeezyData
 
 open class CoreDataEntity: NSManagedObject, Entity {
-    public static var referenceBuilder: ReferenceBuilderProtocol?
     public static var coreDataEntityBuilder: CoreDataEntityBuilderProtocol?
+    public static var referenceBuilder: ReferenceBuilderProtocol?
 
     public static var entityName: String {
         String(describing: Self.self)
