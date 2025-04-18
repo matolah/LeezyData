@@ -2,62 +2,51 @@
 
 <div align="center">
   <h3 align="center">LeezyData</h3>
-
+  
   <p align="center">
+    Generic, composable data layer abstractions for Swift with support for CoreData, Firestore, and custom sources.
+    <br />
     <a href="https://github.com/matolah/LeezyData/issues">Report Bug</a>
     ·
     <a href="https://github.com/matolah/LeezyData/issues">Request Feature</a>
   </p>
 </div>
 
-LeezyData is a generic and agnostic entity-oriented data layer.
-- [About](#about)
-- [Installation](#installation)
-- [Usage](#usage)
-- [License](#license)
-- [Contact](#contact)
+## 📦 What is LeezyData?
 
-## About
+**LeezyData** is a lightweight, extensible data layer framework for Swift.  
+It allows you to compose multiple sources of truth — local (CoreData) or remote (Firestore) — using a unified API built around generic `Entity`, `DataService`, and `DataManager` abstractions.
 
-`LeezyData` is a self-serve package, meaning you can choose to be completely agnostic from third-party libraries or `Swift` frameworks and build your own services, or you can add `LeezyData`'s built-in integration with `CoreData` (for your local database) and `Firestore` (for you remote data).
+- 📁 **CoreData** – for offline storage
+- ☁️ **Firestore** – for real-time cloud sync
+- 📦 **RemoteCollection** – for abstracting any REST or real-time backend
+- 🧱 **Common** – contains the core interfaces: `Entity`, `DataService`, `DataManager`
 
-### Should I use this package in my project?
+## 📥 Installation
 
-If you are building an app with remote data collections and/or a local database layer, then the answer is yes, you should use this package.
-
-### Overview of the contents
-
-This package contains the following libraries:
-
-* `Common`: The foundations of your data layer. It contains the `Entity` protocol, the `DataService` blueprint for each of your entities CRUD operations and the `DataManager` which is the class your app will use to communicate and perform data operations.
-* `CoreData`: A local database layer that uses CoreData to store and retrieve entities. By default, this library doesn't make use of CoreData's relationships, instead it fetches the entities in all the available services using an `id`.
-* `RemoteCollection`: A remote collection layer that completely abstracts the database so you can choose the one that suits you best. This layer supports type-erased entities so you no longer have headaches when modelling your collections. All you need is an `identifier` for your custom types and `AnyRemoteEntity` will do the rest.
-* `Firestore`: Contains protocol conformances to support `Firestore` as a `RemoteCollection` source.
-
-
-## Installation
-
-`LeezyData` is available for installation via SPM:
+Add `LeezyData` to your project using **Swift Package Manager**:
 
 ```swift
 dependencies: [
-    .package(name: "LeezyData", url: "https://github.com/matolah/LeezyData", .upToNextMajor(from: "1.0.0")),
-],
+    .package(url: "https://github.com/matolah/LeezyData.git", .upToNextMajor(from: "1.0.0"))
+]
+```
+
+```swift
 .target(
     name: "MyApp",
     dependencies: [
-      .product(name: "LeezyData", package: "LeezyData"),
-      .product(name: "LeezyCoreData", package: "LeezyData"),
-      .product(name: "LeezyRemoteCollection", package: "LeezyData"),
-      .product(name: "LeezyFirestore", package: "LeezyData")
-  ]
-),
+        .product(name: "LeezyData", package: "LeezyData"),
+        .product(name: "LeezyCoreData", package: "LeezyData"),
+        .product(name: "LeezyRemoteCollection", package: "LeezyData"),
+        .product(name: "LeezyFirestore", package: "LeezyData")
+    ]
+)
 ```
 
+## 🚀 Usage
 
-## Usage
-
-Create your entities:
+### 1. Define your Entities
 
 ```swift
 struct MySimpleEntity: Entity {
@@ -83,7 +72,6 @@ typealias AnyRemoteFirestoreEntity = AnyRemoteEntity<MyRemoteEntityIdentifier>
 
 struct MyRemoteEntity: RemoteEntity {
     static let collectionName = MyRemoteEntityIdentifier.collectionName
-
     let id: String
 }
 
@@ -101,7 +89,7 @@ enum MyRemoteEntityIdentifier: String, AnyRemoteEntityIdentifier {
 }
 ```
 
-Create `DataService`s for your entities and inject them in your `DataManager`. Remember to initialize `coreDataEntityBuilder` for initializing empty `CoreData` objects and `referenceBuilder` if you want to use `LeezyData` relationship creation.
+### 2. Compose your DataManager
 
 ```swift
 lazy var dataManager: DataManager = {
@@ -118,18 +106,23 @@ lazy var dataManager: DataManager = {
 }()
 
 let dataService = DataService<MySimpleEntity>()
-
-let coreDataDataService = CoreDataDataService<MyLocalEntity>(managedObjectContext: NSPersistentContainer(name: "my_model").viewContext)
-
-let firestoreDataService = RemoteCollectionDataService<AnyRemoteFirestoreEntity>(database: Firestore.firestore())
+let coreDataDataService = CoreDataDataService<MyLocalEntity>(
+    managedObjectContext: NSPersistentContainer(name: "my_model").viewContext
+)
+let firestoreDataService = RemoteCollectionDataService<AnyRemoteFirestoreEntity>(
+    database: Firestore.firestore()
+)
 ```
-
 
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
+## 🤝 Contributing
 
-## Contact
+Contributions are welcome!
+If you have suggestions for improvements, bug fixes, or new features, feel free to open an issue or submit a pull request.
 
-Twitter: [@_matolah](https://twitter.com/_matolah)
+## 💬 Contact
+
+Maintained by [https://x.com/_matolah](@_matolah)
