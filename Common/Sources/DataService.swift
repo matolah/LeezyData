@@ -7,8 +7,8 @@ public protocol DataServiceProtocol<DataType> {
     associatedtype DataType: Entity
 
     var valuesSubject: CurrentValueSubject<[DataType], Error> { get }
-    func fetchAll() async -> Result<[DataType], Error>
     func fetch(by id: String) async -> Result<DataType?, Error>
+    func fetchAll() async -> Result<[DataType], Error>
     func create(value: DataType) async -> Result<DataType, Error>
     func update(value: DataType) async -> Result<DataType, Error>
 }
@@ -36,15 +36,15 @@ open class DataService<T: Entity>: DataServiceProtocol {
 
     public init() {}
 
-    open func fetchAll() async -> Result<[T], Error> {
-        .success(latestValues)
-    }
-
     open func fetch(by id: String) async -> Result<T?, Error> {
         let value = latestValues.first { entity in
             entity.id == id
         }
         return .success(value)
+    }
+
+    open func fetchAll() async -> Result<[T], Error> {
+        .success(latestValues)
     }
 
     open func create(value: T) async -> Result<T, Error> {
