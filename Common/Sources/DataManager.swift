@@ -49,7 +49,7 @@ public final class DataManager: ObservableObject, DataManagerProtocol, Reference
                 return match
             }
         }
-        
+
         return nil
     }
 

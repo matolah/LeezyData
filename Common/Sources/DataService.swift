@@ -27,19 +27,19 @@ open class DataService<T: Entity>: DataServiceProtocol {
     public init() {}
 
     open func fetchAll() async -> Result<[T], Error> {
-        return .success(latestValues)
+        .success(latestValues)
     }
 
     open func fetch(by id: String) async -> Result<T?, Error> {
         let value = latestValues.first { entity in
-            return entity.id == id
+            entity.id == id
         }
         return .success(value)
     }
 
     open func create(value: T) async -> Result<T, Error> {
         latestValues.append(value)
-        
+
         return .success(value)
     }
 

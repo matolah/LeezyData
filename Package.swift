@@ -52,7 +52,7 @@ let package = Package(
         .target(
             name: "LeezyCoreData",
             dependencies: [
-              "LeezyData"
+                "LeezyData"
             ],
             path: "CoreData/Sources"
         ),
@@ -64,7 +64,7 @@ let package = Package(
         .target(
             name: "LeezyRemoteCollection",
             dependencies: [
-              "LeezyData"
+                "LeezyData"
             ],
             path: "RemoteCollection/Sources"
         ),
@@ -80,6 +80,6 @@ let package = Package(
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk")
             ],
             path: "Firestore/Sources"
-        ),
+        )
     ]
 )

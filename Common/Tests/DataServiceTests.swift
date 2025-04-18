@@ -25,11 +25,11 @@ final class DataServiceTests: XCTestCase {
         let result = await dataService.fetchAll()
 
         switch result {
-        case .success(let values):
+        case let .success(values):
             XCTAssertEqual(values, [entity])
             XCTAssertEqual(dataService.latestValues, [entity])
             XCTAssertEqual(dataService.valuesSubject.value, [entity])
-        case .failure(let error):
+        case let .failure(error):
             XCTFail(error.localizedDescription)
         }
     }
@@ -41,9 +41,9 @@ final class DataServiceTests: XCTestCase {
         let result = await dataService.fetch(by: "mock")
 
         switch result {
-        case .success(let fetchedEntity):
+        case let .success(fetchedEntity):
             XCTAssertEqual(fetchedEntity, entity)
-        case .failure(let error):
+        case let .failure(error):
             XCTFail(error.localizedDescription)
         }
     }
@@ -55,9 +55,9 @@ final class DataServiceTests: XCTestCase {
         let result = await dataService.fetch(by: "nonexistent_id")
 
         switch result {
-        case .success(let fetchedEntity):
+        case let .success(fetchedEntity):
             XCTAssertNil(fetchedEntity)
-        case .failure(let error):
+        case let .failure(error):
             XCTFail(error.localizedDescription)
         }
     }
@@ -73,11 +73,11 @@ final class DataServiceTests: XCTestCase {
         let result = await dataService.create(value: entity2)
 
         switch result {
-        case .success(let value):
+        case let .success(value):
             XCTAssertEqual(value, entity2)
             XCTAssertEqual(dataService.latestValues, [entity1, entity2])
             XCTAssertEqual(dataService.valuesSubject.value, [entity1, entity2])
-        case .failure(let error):
+        case let .failure(error):
             XCTFail(error.localizedDescription)
         }
     }
@@ -90,11 +90,11 @@ final class DataServiceTests: XCTestCase {
         let result = await dataService.update(value: updatedEntity)
 
         switch result {
-        case .success(let value):
+        case let .success(value):
             XCTAssertEqual(value, updatedEntity)
             XCTAssertEqual(dataService.latestValues, [updatedEntity])
             XCTAssertEqual(dataService.valuesSubject.value, [updatedEntity])
-        case .failure(let error):
+        case let .failure(error):
             XCTFail(error.localizedDescription)
         }
     }
@@ -104,11 +104,11 @@ final class DataServiceTests: XCTestCase {
         let result = await dataService.update(value: entity)
 
         switch result {
-        case .success(let value):
+        case let .success(value):
             XCTAssertEqual(value, entity)
             XCTAssertEqual(dataService.latestValues, [entity])
             XCTAssertEqual(dataService.valuesSubject.value, [entity])
-        case .failure(let error):
+        case let .failure(error):
             XCTFail(error.localizedDescription)
         }
     }

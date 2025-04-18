@@ -17,7 +17,7 @@ open class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreDataDataS
         self.managedObjectContext = managedObjectContext
     }
 
-    open override func fetchAll() async -> Result<[T], Error> {
+    override open func fetchAll() async -> Result<[T], Error> {
         do {
             latestValues = try fetchValues(withPredicate: nil)
 
@@ -34,7 +34,7 @@ open class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreDataDataS
         return try managedObjectContext.fetch(request) as? [T] ?? []
     }
 
-    open override func fetch(by id: String) async -> Result<T?, Error> {
+    override open func fetch(by id: String) async -> Result<T?, Error> {
         do {
             let predicate = NSPredicate(
                 format: "id = %@", id
@@ -54,7 +54,7 @@ open class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreDataDataS
         }
     }
 
-    open override func create(value: T) async -> Result<T, Error> {
+    override open func create(value: T) async -> Result<T, Error> {
         do {
             managedObjectContext.insert(value)
 
@@ -66,7 +66,7 @@ open class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreDataDataS
         }
     }
 
-    open override func update(value: T) async -> Result<T, Error> {
+    override open func update(value: T) async -> Result<T, Error> {
         do {
             try managedObjectContext.save()
 
@@ -77,7 +77,7 @@ open class CoreDataDataService<T: CoreDataEntity>: DataService<T>, CoreDataDataS
     }
 
     open func createEmpty() -> T? {
-        return NSEntityDescription.insertNewObject(
+        NSEntityDescription.insertNewObject(
             forEntityName: T.entityName,
             into: managedObjectContext
         ) as? T

@@ -15,7 +15,7 @@ final class AnyRemoteEntityTests: XCTestCase {
                 "id": "mock"
             }
             """
-                .utf8
+            .utf8
         )
 
         let value = try decoder.decode(AnyRemoteEntity<AnyMockRemoteEntityIdentifier>.self, from: data)
@@ -33,7 +33,7 @@ final class AnyRemoteEntityTests: XCTestCase {
                 "id": "mock"
             }
             """
-                .utf8
+            .utf8
         )
 
         XCTAssertThrowsError(try decoder.decode(AnyRemoteEntity<AnyMockRemoteEntityIdentifier>.self, from: data))

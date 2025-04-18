@@ -56,7 +56,7 @@ final class RemoteCollectionSpy: RemoteCollection {
         return valueToReturn as! T
     }
 
-    func updateDocument<T: Codable>(_ value: T, id: String) async throws {
+    func updateDocument(_ value: some Codable, id: String) async throws {
         updateDocumentCalled = true
         valuePassed = value
         idPassed = id
@@ -71,6 +71,6 @@ final class MockRemoteCollectionDocument: RemoteCollectionDocument {
     var decodedToReturn: (any Decodable)!
 
     func decoded<T: Decodable>(as type: T.Type) throws -> T {
-        return decodedToReturn as! T
+        decodedToReturn as! T
     }
 }

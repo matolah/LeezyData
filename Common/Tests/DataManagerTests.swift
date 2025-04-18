@@ -39,10 +39,10 @@ final class DataManagerTests: XCTestCase {
         let result: Result<[MockEntity], Error> = await dataManager.refreshValues()
 
         switch result {
-        case .success(let values):
+        case let .success(values):
             XCTAssertTrue(dataServiceSpy.fetchAllCalled)
             XCTAssertEqual(values, [mockEntity])
-        case .failure(let error):
+        case let .failure(error):
             XCTFail(error.localizedDescription)
         }
     }
@@ -55,7 +55,7 @@ final class DataManagerTests: XCTestCase {
         switch result {
         case .success:
             XCTFail()
-        case .failure(let error):
+        case let .failure(error):
             XCTAssertTrue(error as? DataManagementError == DataManagementError.serviceNotFound)
         }
     }
@@ -67,7 +67,7 @@ final class DataManagerTests: XCTestCase {
         let result = await dataManager.create(value: mockEntity)
 
         switch result {
-        case .success(let value):
+        case let .success(value):
             XCTAssertTrue(dataServiceSpy.createCalled)
             XCTAssertEqual(value, mockEntity)
         case .failure:
@@ -83,7 +83,7 @@ final class DataManagerTests: XCTestCase {
         switch result {
         case .success:
             XCTFail()
-        case .failure(let error):
+        case let .failure(error):
             XCTAssertTrue(error as? DataManagementError == DataManagementError.serviceNotFound)
         }
     }
@@ -95,7 +95,7 @@ final class DataManagerTests: XCTestCase {
         let result = await dataManager.update(value: mockEntity)
 
         switch result {
-        case .success(let value):
+        case let .success(value):
             XCTAssertTrue(dataServiceSpy.updateCalled)
             XCTAssertEqual(value, mockEntity)
         case .failure:
@@ -111,7 +111,7 @@ final class DataManagerTests: XCTestCase {
         switch result {
         case .success:
             XCTFail()
-        case .failure(let error):
+        case let .failure(error):
             XCTAssertTrue(error as? DataManagementError == DataManagementError.serviceNotFound)
         }
     }

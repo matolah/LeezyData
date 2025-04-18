@@ -24,20 +24,20 @@ public final class AnyRemoteEntity<Identifier: AnyRemoteEntityIdentifier>: Remot
     }
 
     public static var collectionName: String {
-        return Identifier.collectionName
+        Identifier.collectionName
     }
 
     public let value: any RemoteEntity
 
     public var id: String {
-        return value.id
+        value.id
     }
 
     public init(value: any RemoteEntity) {
         self.value = value
     }
 
-    convenience public init(from decoder: Decoder) throws {
+    public convenience init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let identifier = try container.decode(String.self, forKey: .identifier)
         guard let metatype = Identifier(rawValue: identifier)?.metatype else {
@@ -50,7 +50,7 @@ public final class AnyRemoteEntity<Identifier: AnyRemoteEntityIdentifier>: Remot
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         let identifier = Identifier.allCases.first {
-            return $0.metatype == type(of: value)
+            $0.metatype == type(of: value)
         }
         guard let identifier else {
             throw EntityEncodingFailed()

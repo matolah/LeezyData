@@ -19,24 +19,24 @@ public protocol RemoteCollectionDocument {
 
 public struct MockRemoteCollectionDatabase: RemoteCollectionDatabase {
     public init() {}
-    
+
     public func collection(named collectionPath: String) -> RemoteCollection {
-        return MockRemoteCollection()
+        MockRemoteCollection()
     }
 }
 
 struct MockRemoteCollection: RemoteCollection {
     func documents() async throws -> [RemoteCollectionDocument] {
-        return []
+        []
     }
 
     func document(by id: String) async throws -> RemoteCollectionDocument? {
-        return nil
+        nil
     }
 
     func addDocument<T: Codable>(_ value: T) async throws -> T {
-        return value
+        value
     }
 
-    func updateDocument<T: Codable>(_ value: T, id: String) async throws {}
+    func updateDocument(_ value: some Codable, id: String) async throws {}
 }

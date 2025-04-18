@@ -2,16 +2,17 @@
 
 import Foundation
 
-extension Encodable {
-    public var dictionary: [String: Any] {
+public extension Encodable {
+    var dictionary: [String: Any] {
         guard let jsonData = try? JSONEncoder().encode(self),
-              let dictionary = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [String: Any] else {
+              let dictionary = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [String: Any]
+        else {
             return [:]
         }
         return dictionary
     }
 
-    public var trimmedNilDictionary: [String: Any] {
-        return dictionary.compactMapValues { $0 }
+    var trimmedNilDictionary: [String: Any] {
+        dictionary.compactMapValues { $0 }
     }
 }

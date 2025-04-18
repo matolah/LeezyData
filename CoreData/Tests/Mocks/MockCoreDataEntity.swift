@@ -18,6 +18,7 @@ final class MockCoreDataEntity: CoreDataEntity {
             return _reference
         }
     }
+
     fileprivate var _reference: MockReferenceEntity!
 }
 

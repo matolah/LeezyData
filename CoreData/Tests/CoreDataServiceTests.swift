@@ -64,9 +64,9 @@ final class CoreDataServiceTests: XCTestCase {
         let result = await dataService.fetchAll()
 
         switch result {
-        case .success(let values):
+        case let .success(values):
             XCTAssertEqual(values, [entity])
-        case .failure(let error):
+        case let .failure(error):
             XCTFail(error.localizedDescription)
         }
     }
@@ -95,10 +95,10 @@ final class CoreDataServiceTests: XCTestCase {
         let result = await dataService.create(value: entity)
 
         switch result {
-        case .success(let value):
+        case let .success(value):
             XCTAssertEqual(value, entity)
             XCTAssertEqual(dataService.latestValues, [entity])
-        case .failure(let error):
+        case let .failure(error):
             XCTFail(error.localizedDescription)
         }
     }
@@ -119,10 +119,10 @@ final class CoreDataServiceTests: XCTestCase {
         let result = await dataService.update(value: entity)
 
         switch result {
-        case .success(let value):
+        case let .success(value):
             XCTAssertEqual(value, entity)
             XCTAssertEqual(dataService.latestValues, [entity])
-        case .failure(let error):
+        case let .failure(error):
             XCTFail(error.localizedDescription)
         }
     }

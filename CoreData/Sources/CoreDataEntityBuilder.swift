@@ -10,7 +10,8 @@ public protocol CoreDataEntityBuilderProtocol {
 extension DataManager: CoreDataEntityBuilderProtocol {
     public func create<T: CoreDataEntity>() -> T? {
         guard let dataService = dataService(T.self) as? any CoreDataDataServiceProtocol<T>,
-              let newValue = dataService.createEmpty() else {
+              let newValue = dataService.createEmpty()
+        else {
             return nil
         }
         newValue.id = UUID().uuidString

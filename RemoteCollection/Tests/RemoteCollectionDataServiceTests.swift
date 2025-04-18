@@ -35,7 +35,7 @@ final class RemoteCollectionDataServiceTests: XCTestCase {
 
         XCTAssertTrue(databaseSpy.collectionCalled)
         switch result {
-        case .success(let values):
+        case let .success(values):
             XCTAssertEqual(values, [anyEntity])
             XCTAssertEqual(values, dataService.latestValues)
         case .failure:
@@ -54,7 +54,7 @@ final class RemoteCollectionDataServiceTests: XCTestCase {
         switch result {
         case .success:
             XCTFail()
-        case .failure(let error):
+        case let .failure(error):
             XCTAssertTrue(error is RemoteCollectionError)
         }
     }
@@ -72,7 +72,7 @@ final class RemoteCollectionDataServiceTests: XCTestCase {
 
         XCTAssertTrue(databaseSpy.collectionCalled)
         switch result {
-        case .success(let value):
+        case let .success(value):
             XCTAssertEqual(value, anyEntity)
         case .failure:
             XCTFail()
@@ -87,7 +87,7 @@ final class RemoteCollectionDataServiceTests: XCTestCase {
 
         XCTAssertTrue(databaseSpy.collectionCalled)
         switch result {
-        case .success(let value):
+        case let .success(value):
             XCTAssertNil(value)
         case .failure:
             XCTFail()
@@ -105,7 +105,7 @@ final class RemoteCollectionDataServiceTests: XCTestCase {
         switch result {
         case .success:
             XCTFail()
-        case .failure(let error):
+        case let .failure(error):
             XCTAssertTrue(error is RemoteCollectionError)
         }
     }
@@ -122,7 +122,7 @@ final class RemoteCollectionDataServiceTests: XCTestCase {
         XCTAssertTrue(databaseSpy.collectionCalled)
         XCTAssertTrue(collection.addDocumentCalled)
         switch result {
-        case .success(let value):
+        case let .success(value):
             XCTAssertEqual(value, anyEntity)
             XCTAssertEqual(dataService.latestValues, [anyEntity])
         case .failure:
@@ -145,7 +145,7 @@ final class RemoteCollectionDataServiceTests: XCTestCase {
         switch result {
         case .success:
             XCTFail()
-        case .failure(let error):
+        case let .failure(error):
             XCTAssertTrue(error is RemoteCollectionError)
         }
     }
@@ -163,7 +163,7 @@ final class RemoteCollectionDataServiceTests: XCTestCase {
         XCTAssertTrue(databaseSpy.collectionCalled)
         XCTAssertTrue(collection.updateDocumentCalled)
         switch result {
-        case .success(let value):
+        case let .success(value):
             XCTAssertEqual(value, anyEntity)
             XCTAssertEqual(dataService.latestValues, [anyEntity])
         case .failure:
@@ -186,7 +186,7 @@ final class RemoteCollectionDataServiceTests: XCTestCase {
         switch result {
         case .success:
             XCTFail()
-        case .failure(let error):
+        case let .failure(error):
             XCTAssertTrue(error is RemoteCollectionError)
         }
     }

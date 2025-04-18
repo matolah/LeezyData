@@ -8,6 +8,6 @@ public protocol Entity: Equatable {
 
 public extension Entity {
     static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.id == rhs.id
+        lhs.id == rhs.id
     }
 }

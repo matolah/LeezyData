@@ -18,7 +18,7 @@ enum AnyMockRemoteEntityIdentifier: String, AnyRemoteEntityIdentifier {
     var metatype: any RemoteEntity.Type {
         switch self {
         case .mock:
-            return MockRemoteEntity.self
+            MockRemoteEntity.self
         }
     }
 }
