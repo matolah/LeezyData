@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build-lint-test:
+    name: Build, Lint & Test
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Install tools from Brewfile
+        run: brew bundle --file=Brewfile
+
+      - name: Build project
+        run: swift build
+
+      - name: Lint with SwiftLint
+        run: swiftlint --fix
+
+      - name: Check formatting with SwiftFormat
+        run: swiftformat .
+
+      - name: Run unit tests
+        run: swift test
